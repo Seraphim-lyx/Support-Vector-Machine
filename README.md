@@ -6,5 +6,5 @@ X -> two dimension data set.
 y -> one dimension data set.
 
 Data is better to process in numpy array.
-the numpy array must be set to 'int' if data is in an integer format, 
-otherwise unpredictable error will happen during process
+the numpy array must be set to 'int' if data is in integer format, 
+otherwise unpredictable error will happen during processing
