@@ -178,17 +178,18 @@ class SMO(object):
 
 f = sio.loadmat('f:\\matlab\Hw2-package\spamTrain.mat')
 ff = sio.loadmat('f:\\matlab\Hw2-package\spamTest.mat')
-XX = f['X'][:4000].astype(int)
+XX = f['X'][:3000].astype(int)
 testx = ff['Xtest'].astype(int)
-yy = f['y'][:4000].astype(int)
+yy = f['y'][:3000].astype(int)
 testy = ff['ytest'].reshape(1, -1)[0].astype(int)
 yy = yy.reshape(1, -1)[0].astype(int)
 yy[yy == 0] = -1
 testy[testy == 0] = -1
 
-smo = SMO(kernel='rbf')
+smo = SMO(kernel='linear')
 smo.train(XX, yy)
 print(len(smo.alpha))
 p = smo.predict(testx)
+
 
 print(smo.evaluate(testy, p))
