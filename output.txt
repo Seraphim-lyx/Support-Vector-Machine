@@ -1,0 +1,6 @@
+The accuracy for toxic is 0.911
+The accuracy for severe_toxic is 0.991
+The accuracy for obscene is 0.961
+The accuracy for threat is 0.999
+The accuracy for insult is 0.948
+The accuracy for identity_hate is 0.985

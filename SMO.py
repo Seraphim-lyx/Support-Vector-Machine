@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import scipy.io as sio
-
+from sklearn import svm
 
 class SMO(object):
     """
@@ -12,10 +12,10 @@ class SMO(object):
     y -> one dimension data set
      """
 
-    def __init__(self, kernel='linear', degree=2, C=0.1, gamma=None, tol=1e-3):
+    def __init__(self, kernel='linear', degree=2, C=1, gamma=None, tol=1e-3):
         self.kernel = kernel
         self.gamma = gamma  # parameter for gaussian
-        self.C = C  # boundry for alpha
+        self.C = C  # regularization
         self.tol = tol  # tolerance edge
         self.degree = degree  # power degree for polynomial kernel
 
@@ -125,12 +125,14 @@ class SMO(object):
                 # print("reset count")
                 count = 0
             print("whole iter number {0}".format(count))
-
+        # index = np.where(self.alpha < 0)[0]
+        # self.alpha[index] = 0
         self.w = np.dot(self.alpha * y, X)
         index = np.where(self.alpha > 0)[0]
         self.alpha = self.alpha[self.alpha > 0]
         self.X = self.X[index]
         self.y = self.y[index]
+
 
     def predict(self, px):
         p = np.array([])
@@ -173,23 +175,65 @@ class SMO(object):
         # value = (-1*1) / (2 * np.power (2,2))
         # exp = np.exp(value)
         # return exp**res # 0 < gamma < 1
-        return np.exp(-self.gamma * res)
+        return np.exp(-1.0 * self.gamma * res)
 
 
-f = sio.loadmat('f:\\matlab\Hw2-package\spamTrain.mat')
-ff = sio.loadmat('f:\\matlab\Hw2-package\spamTest.mat')
-XX = f['X'][:3000].astype(int)
-testx = ff['Xtest'].astype(int)
-yy = f['y'][:3000].astype(int)
-testy = ff['ytest'].reshape(1, -1)[0].astype(int)
-yy = yy.reshape(1, -1)[0].astype(int)
-yy[yy == 0] = -1
-testy[testy == 0] = -1
+# f = sio.loadmat('f:\\matlab\Hw2-package\spamTrain.mat')
+# ff = sio.loadmat('f:\\matlab\Hw2-package\spamTest.mat')
+# XX = f['X'][:2000].astype(int)
+# testx = ff['Xtest'].astype(int)
+# yy = f['y'][:2000].astype(int)
+# testy = ff['ytest'].reshape(1, -1)[0].astype(int)
+# yy = yy.reshape(1, -1)[0].astype(int)
+# yy[yy == 0] = -1
+# testy[testy == 0] = -1
 
-smo = SMO(kernel='linear')
-smo.train(XX, yy)
-print(len(smo.alpha))
-p = smo.predict(testx)
+# smo = SMO(kernel='linear')
+# smo.train(XX, yy)
+# print(len(smo.alpha))
+# p = smo.predict(testx)
 
 
-print(smo.evaluate(testy, p))
+# print(smo.evaluate(testy, p))
+# 
+
+f = open('output1.txt', 'w')
+label = ['toxic','severe_toxic','obscene','threat','insult','identity_hate']
+x = np.loadtxt('a.txt', delimiter = ",").astype(int)
+y_ = np.loadtxt('label.txt',delimiter = ",").astype(int)
+y_[y_==0] = -1
+
+y = y_.T[5].astype(int)
+
+
+
+
+
+
+TrainingX = x[:4000]
+TrainingY = y[:4000]
+TestX = x[4000:]
+TestY = y[4000:]
+
+# smo = SMO(kernel='rbf')
+# smo.train(TrainingX, TrainingY)
+
+# p = smo.predict(TestX)
+# print(p)
+# accuracy = smo.evaluate(TestY, p)
+# print(accuracy)
+    # f.writelines("The accuracy for {0} is {1}\n".format(label[j], accuracy))
+
+# f.close()    
+
+s = svm.SVC(kernel = 'rbf')
+s.fit(TrainingX,TrainingY)
+y_ = s.predict(TestX)
+print(TestX)
+print(y_)
+count = 0
+for i in range(len(TestY)):
+    if TestY[i] == y_[i]:
+        count += 1
+
+print(count/len(TestY))
