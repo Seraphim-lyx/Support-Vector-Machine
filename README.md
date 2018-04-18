@@ -11,4 +11,4 @@ y -> one dimension data set.
 Data is better to process in numpy array.
 
 The numpy array must be set to 'int' if data is in integer format, 
-otherwise unpredictable error will happen during processing
+otherwise unpredictable calculation error will occur during processing

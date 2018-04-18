@@ -197,16 +197,12 @@ class SMO(object):
 # print(smo.evaluate(testy, p))
 # 
 
-f = open('output1.txt', 'w')
 label = ['toxic','severe_toxic','obscene','threat','insult','identity_hate']
 x = np.loadtxt('a.txt', delimiter = ",").astype(int)
 y_ = np.loadtxt('label.txt',delimiter = ",").astype(int)
 y_[y_==0] = -1
 
-y = y_.T[5].astype(int)
-
-
-
+y = y_.T[0].astype(int)
 
 
 
@@ -215,25 +211,11 @@ TrainingY = y[:4000]
 TestX = x[4000:]
 TestY = y[4000:]
 
-# smo = SMO(kernel='rbf')
-# smo.train(TrainingX, TrainingY)
+smo = SMO(kernel='linear')
+smo.train(TrainingX, TrainingY)
 
-# p = smo.predict(TestX)
-# print(p)
-# accuracy = smo.evaluate(TestY, p)
-# print(accuracy)
-    # f.writelines("The accuracy for {0} is {1}\n".format(label[j], accuracy))
+p = smo.predict(TestX)
+print(p)
+accuracy = smo.evaluate(TestY, p)
+print(accuracy)
 
-# f.close()    
-
-s = svm.SVC(kernel = 'rbf')
-s.fit(TrainingX,TrainingY)
-y_ = s.predict(TestX)
-print(TestX)
-print(y_)
-count = 0
-for i in range(len(TestY)):
-    if TestY[i] == y_[i]:
-        count += 1
-
-print(count/len(TestY))
